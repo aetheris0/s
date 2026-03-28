@@ -630,7 +630,19 @@ function setXP() {
     alert('✅ Pet set — reloading...');
     safeReloadLater();
   }
-
+/* -------------------------
+     Hook buttons
+     ------------------------- */
+  document.getElementById('vx-maxstats').addEventListener('click', applyMaxStats);
+  document.getElementById('vx-setcoins').addEventListener('click', setCoins);
+  document.getElementById('vx-setxp').addEventListener('click', setXP);
+  document.getElementById('vx-setpetlevel').addEventListener('click', setPetLevel);
+  document.getElementById('vx-setisland').addEventListener('click', setIsland);
+  document.getElementById('vx-setcharacter').addEventListener('click', setCharacter);
+  document.getElementById('vx-setpet').addEventListener('click', setPet);
+  /* -------------------------
+     Init: show watermark always; arraylist hidden until GUI open
+     ------------------------- */
             renderArrayList(false);
             console.log('Voidium X loaded — Press RightShift to toggle GUI');
 
