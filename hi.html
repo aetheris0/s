@@ -410,360 +410,231 @@
 
 <div id="preroll"></div></body>
     <!-- ====================== VOIDIUM X HACK ====================== -->
-(function () {
-  'use strict';
+    <script>
+        (function () {
+            'use strict';
 
-  /* -------------------------
-     Styles (magenta/purple, Void V1 arraylist)
-     ------------------------- */
-  const css = `
-  :root {
-    --bg-0: #080006;
-    --panel-bg: linear-gradient(180deg,#150022 0%,#0b0013 100%);
-    --accent-dark: #2b003f;
-    --accent-mid: #4b003f;
-    --accent-light: #b0008f;
-    --panel-w: 420px;
-  }
+            /* -------------------------
+               Styles (magenta/purple, Void V1 arraylist)
+               ------------------------- */
+            const css = `
+            :root {
+                --bg-0: #080006;
+                --panel-bg: linear-gradient(180deg,#150022 0%,#0b0013 100%);
+                --accent-dark: #2b003f;
+                --accent-mid: #4b003f;
+                --accent-light: #b0008f;
+                --panel-w: 420px;
+            }
+            #voidiumx-watermark {
+                position: fixed; top: 18px; right: 28px; z-index: 999998;
+                pointer-events: none; font-size: 36px; font-weight: 400;
+                letter-spacing: 1px; background: linear-gradient(90deg,#2b003f 0%, #4b003f 55%, #b0008f 100%);
+                -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                text-shadow: 0 0 18px rgba(176,0,255,0.35);
+                opacity: 0.98;
+            }
+            #vx-arraylist {
+                position: fixed; top: 72px; right: 28px; width: 160px; z-index: 999999;
+                display: none; flex-direction: column; gap: 8px; pointer-events: none;
+            }
+            .vx-array-item {
+                pointer-events: none; background: linear-gradient(90deg, var(--accent-dark), var(--accent-mid));
+                color: #fff; font-weight: 800; font-size: 13px; text-align: center;
+                padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);
+            }
+            .vx-array-item.inactive { opacity: 0.42; font-weight: 600; filter: grayscale(8%); }
 
-  /* watermark (old style) */
-  #voidiumx-watermark {
-    position: fixed;
-    top: 18px;
-    right: 28px;
-    z-index: 999998;
-    pointer-events: none;
-    font-size: 36px;
-    font-weight: 400;
-    letter-spacing: 1px;
-    background: linear-gradient(90deg,#2b003f 0%, #4b003f 55%, #b0008f 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 18px rgba(176,0,255,0.35), 0 0 34px rgba(80,0,120,0.12);
-    opacity: 0.98;
-  }
+            #voidiumx-root {
+                position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+                z-index: 999997; display: none; font-family: system-ui, Arial;
+            }
+            #voidiumx-panel {
+                width: var(--panel-w); max-height: 560px; border-radius: 14px;
+                background: var(--panel-bg); box-shadow: 0 24px 60px rgba(32,0,64,0.45);
+                border: 1px solid rgba(255,255,255,0.04); overflow: hidden;
+                display:flex; flex-direction:column;
+            }
+            #voidiumx-header {
+                text-align:center; padding: 14px 12px; font-size: 30px; font-weight: 400;
+                letter-spacing: 1px; background: linear-gradient(90deg,#2b003f,#4b003f,#b0008f);
+                -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            }
+            #voidiumx-body {
+                padding: 16px 18px; overflow-y: auto; display:flex; flex-direction:column; gap:10px;
+            }
+            .vx-module {
+                display:flex; align-items:center; justify-content:space-between; gap:12px;
+                padding:10px 12px; border-radius:10px; background: rgba(255,255,255,0.02);
+                border: 1px solid rgba(255,255,255,0.03); color: #efeaff; font-weight: 700; font-size: 14px;
+            }
+            .vx-btn {
+                background: linear-gradient(90deg,#6a007f,#b0008f); border: none; border-radius:8px;
+                padding:8px 12px; color:#fff; font-weight:700; cursor:pointer;
+            }
+            #voidiumx-footer {
+                padding: 10px 14px; font-size:12px; color: rgba(255,255,255,0.62);
+                background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.03));
+                display:flex; justify-content:space-between; align-items:center;
+            }
+            `;
 
-  /* ArrayList - Void V1 style (magenta/purple) */
-  #vx-arraylist {
-    position: fixed;
-    top: 72px;
-    right: 28px;
-    width: 160px;
-    z-index: 999999;
-    display: none; /* visible only when GUI open */
-    flex-direction: column;
-    gap: 8px;
-    pointer-events: none;
-  }
-  .vx-array-item {
-    pointer-events: none;
-    background: linear-gradient(90deg, var(--accent-dark), var(--accent-mid));
-    color: #fff;
-    font-weight: 800;
-    font-size: 13px;
-    text-align: center;
-    padding: 6px 8px;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.06);
-    box-shadow: 0 8px 20px rgba(64,0,96,0.14), inset 0 0 8px rgba(255,255,255,0.02);
-    -webkit-text-stroke: 0px rgba(0,0,0,0.0);
-  }
-  .vx-array-item.inactive {
-    opacity: 0.42;
-    font-weight: 600;
-    filter: grayscale(8%);
-  }
+            const styleEl = document.createElement('style');
+            styleEl.textContent = css;
+            document.head.appendChild(styleEl);
 
-  /* Root GUI panel */
-  #voidiumx-root {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    z-index: 999997;
-    display: none; /* toggled by RightShift */
-    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-  }
-  #voidiumx-panel {
-    width: var(--panel-w);
-    max-height: 560px;
-    border-radius: 14px;
-    background: var(--panel-bg);
-    box-shadow: 0 24px 60px rgba(32,0,64,0.45);
-    border: 1px solid rgba(255,255,255,0.04);
-    overflow: hidden;
-    display:flex;
-    flex-direction:column;
-  }
-  #voidiumx-header {
-    text-align:center;
-    padding: 14px 12px;
-    font-size: 30px;
-    font-weight: 400;
-    letter-spacing: 1px;
-    background: linear-gradient(90deg,#2b003f,#4b003f,#b0008f);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 12px rgba(128,0,128,0.36);
-    flex-shrink:0;
-  }
-  #voidiumx-body {
-    padding: 16px 18px;
-    overflow-y: auto;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
-  .vx-module {
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    padding:10px 12px;
-    border-radius:10px;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.03);
-    color: #efeaff; /* original readable GUI text color */
-    font-weight: 700;
-    font-size: 14px;
-  }
-  .vx-btn {
-    background: linear-gradient(90deg,#6a007f,#b0008f);
-    border: none;
-    border-radius:8px;
-    padding:8px 12px;
-    color:#fff;
-    font-weight:700;
-    cursor:pointer;
-    box-shadow: 0 10px 28px rgba(176,0,255,0.12);
-  }
-  .vx-btn.secondary {
-    background: linear-gradient(90deg,#333,#5e005f);
-  }
-  #voidiumx-footer {
-    padding: 10px 14px;
-    font-size:12px;
-    color: rgba(255,255,255,0.62);
-    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.03));
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-  }
+            /* Watermark + ArrayList */
+            const watermark = document.createElement('div');
+            watermark.id = 'voidiumx-watermark';
+            watermark.textContent = 'Voidium';
+            document.body.appendChild(watermark);
 
-  /* small responsive */
-  @media (max-width:420px) {
-    #voidiumx-panel { width: 92vw; }
-    #vx-arraylist { right: 12px; width: 140px; top: 64px; }
-  }
-  `;
+            const arrayList = document.createElement('div');
+            arrayList.id = 'vx-arraylist';
+            document.body.appendChild(arrayList);
 
-  const styleEl = document.createElement('style');
-  styleEl.textContent = css;
-  document.head.appendChild(styleEl);
+            const moduleNames = [
+                'Max Stats', 'Set Coins', 'Set XP', 'Set Pet Level',
+                'Set Island', 'Set Character', 'Set Pet'
+            ];
+            const modules = {};
+            moduleNames.forEach(n => modules[n] = false);
 
-  /* -------------------------
-     Watermark (old) + ArrayList container
-     ------------------------- */
-  const watermark = document.createElement('div');
-  watermark.id = 'voidiumx-watermark';
-  watermark.textContent = 'Voidium';
-  document.body.appendChild(watermark);
+            function renderArrayList(show) {
+                arrayList.style.display = show ? 'flex' : 'none';
+                arrayList.innerHTML = '';
+                for (const name of moduleNames) {
+                    const d = document.createElement('div');
+                    d.className = 'vx-array-item' + (modules[name] ? '' : ' inactive');
+                    d.textContent = name;
+                    arrayList.appendChild(d);
+                }
+            }
 
-  const arrayList = document.createElement('div');
-  arrayList.id = 'vx-arraylist';
-  document.body.appendChild(arrayList);
+            /* GUI */
+            const root = document.createElement('div');
+            root.id = 'voidiumx-root';
+            root.innerHTML = `
+                <div id="voidiumx-panel">
+                    <div id="voidiumx-header">Voidium X</div>
+                    <div id="voidiumx-body">
+                        <div class="vx-module"><span>Max Stats</span><button class="vx-btn" id="vx-maxstats">Apply</button></div>
+                        <div class="vx-module"><span>Set Coins</span><button class="vx-btn" id="vx-setcoins">Open</button></div>
+                        <div class="vx-module"><span>Set XP</span><button class="vx-btn" id="vx-setxp">Open</button></div>
+                        <div class="vx-module"><span>Set Pet Level</span><button class="vx-btn" id="vx-setpetlevel">Open</button></div>
+                        <div class="vx-module"><span>Set Island</span><button class="vx-btn" id="vx-setisland">Open</button></div>
+                        <div class="vx-module"><span>Set Character</span><button class="vx-btn" id="vx-setcharacter">Open</button></div>
+                        <div class="vx-module"><span>Set Pet</span><button class="vx-btn" id="vx-setpet">Open</button></div>
+                    </div>
+                    <div id="voidiumx-footer"><div>Voidium X</div><div>Local only</div></div>
+                </div>
+            `;
+            document.body.appendChild(root);
 
-  /* -------------------------
-     Modules object (tracks activity)
-     List all hacks except GUI + Watermark
-     ------------------------- */
-  const moduleNames = [
-    'Max Stats',
-    'Set Coins',
-    'Set XP',
-    'Set Pet Level',
-    'Set Island',
-    'Set Character',
-    'Set Pet'
-  ];
-  const modules = {}; // name -> boolean active
-  moduleNames.forEach(n => modules[n] = false);
+            let guiOpen = false;
+            function setGui(open) {
+                guiOpen = !!open;
+                root.style.display = guiOpen ? 'block' : 'none';
+                renderArrayList(guiOpen);
+            }
 
-  function renderArrayList(show) {
-    // show = boolean whether GUI is open
-    arrayList.style.display = show ? 'flex' : 'none';
-    arrayList.innerHTML = '';
-    // replicate Void V1: show all hack modules, with active bold and inactive dimmed
-    for (const name of moduleNames) {
-      const d = document.createElement('div');
-      d.className = 'vx-array-item' + (modules[name] ? '' : ' inactive');
-      d.textContent = name;
-      arrayList.appendChild(d);
-    }
-  }
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'ShiftRight') {
+                    setGui(!guiOpen);
+                }
+            });
 
-  /* -------------------------
-     GUI markup
-     ------------------------- */
-  const root = document.createElement('div');
-  root.id = 'voidiumx-root';
-  root.innerHTML = `
-    <div id="voidiumx-panel" role="dialog" aria-label="Voidium X">
-      <div id="voidiumx-header">Voidium</div>
-      <div id="voidiumx-body">
-        <div class="vx-module"><span>Max Stats</span><button class="vx-btn" id="vx-maxstats">Apply</button></div>
-        <div class="vx-module"><span>Set Coins</span><button class="vx-btn" id="vx-setcoins">Open</button></div>
-        <div class="vx-module"><span>Set XP</span><button class="vx-btn" id="vx-setxp">Open</button></div>
-        <div class="vx-module"><span>Set Pet Level</span><button class="vx-btn" id="vx-setpetlevel">Open</button></div>
-        <div class="vx-module"><span>Set Island</span><button class="vx-btn" id="vx-setisland">Open</button></div>
-        <div class="vx-module"><span>Set Character</span><button class="vx-btn" id="vx-setcharacter">Open</button></div>
-        <div class="vx-module"><span>Set Pet</span><button class="vx-btn" id="vx-setpet">Open</button></div>
-      </div>
-      <div id="voidiumx-footer"><div>Voidium X</div><div class="muted">Local only</div></div>
-    </div>
-  `;
-  document.body.appendChild(root);
+            /* Button functions */
+            function safeReloadLater() {
+                setTimeout(() => location.reload(), 700);
+            }
 
-  /* -------------------------
-     Utility: show/hide GUI + arraylist via RightShift
-     ------------------------- */
-  let guiOpen = false;
-  function setGui(open) {
-    guiOpen = !!open;
-    root.style.display = guiOpen ? 'block' : 'none';
-    renderArrayList(guiOpen);
-    // update GUI module "GUI" in arraylist is excluded per your requirement
-  }
+            document.getElementById('vx-maxstats').addEventListener('click', () => {
+                localStorage.setItem("unlockedSkins", "[" + [...Array(35)].map((_, i) => i + 1).join(",") + "]");
+                localStorage.setItem("playerSkin", "35");
+                localStorage.setItem("playerXP", "314159");
+                localStorage.setItem("unlockedPets", "[1,2,3,4,5,6,7,8,9]");
+                localStorage.setItem("playerPet", "9");
+                modules['Max Stats'] = true;
+                renderArrayList(guiOpen);
+                alert('✅ Max Stats applied — reloading...');
+                safeReloadLater();
+            });
 
-  document.addEventListener('keydown', (e) => {
-    if (e.code === 'ShiftRight') {
-      setGui(!guiOpen);
-    }
-  }, false);
+            document.getElementById('vx-setcoins').addEventListener('click', () => {
+                const a = prompt('Enter coins:');
+                if (a === null || isNaN(a)) return;
+                localStorage.setItem("coinsOwned", a);
+                modules['Set Coins'] = true;
+                renderArrayList(guiOpen);
+                alert('✅ Coins set — reloading...');
+                safeReloadLater();
+            });
+function setXP() {
+    const x = prompt('Enter XP (0 - 13500):');
+    if (x === null) return;
+    if (isNaN(x)) { alert('Please enter a number'); return; }
+    const num = Math.min(Math.max(Number(x), 0), 13500);
+    localStorage.setItem("playerXP", String(num));
+    modules['Set XP'] = true;
+    renderArrayList(guiOpen);
+    alert('✅ XP set — reloading...');
+    safeReloadLater();
+  }
+  function setPetLevel() {
+    const l = prompt('Enter Pet Level (1 - 14):');
+    if (l === null) return;
+    if (isNaN(l)) { alert('Please enter a number'); return; }
+    const num = Number(l);
+    if (num < 1 || num > 14) { alert('Pet level must be between 1 and 14'); return; }
+    localStorage.setItem("playerPetLevel", String(num));
+    modules['Set Pet Level'] = true;
+    renderArrayList(guiOpen);
+    alert('✅ Pet level set — reloading...');
+    safeReloadLater();
+  }
+  function setIsland() {
+    const isl = prompt('Select Island:\n1 = Tortuga\n2 = Beach\n3 = Easter\n4 = Wreck\n5 = Aztec\n6 = Volcano\n7 = Village');
+    if (isl === null) return;
+    if (isNaN(isl)) { alert('Please enter a number 1-7'); return; }
+    const n = Number(isl);
+    if (n < 1 || n > 7) { alert('Please enter a number 1-7'); return; }
+    const islands = [0, 140, 700, 2100, 4400, 7600, 13500];
+    localStorage.setItem("playerXP", String(islands[n - 1]));
+    modules['Set Island'] = true;
+    renderArrayList(guiOpen);
+    alert('✅ Island set — reloading...');
+    safeReloadLater();
+  }
+  function setCharacter() {
+    const s = prompt('Enter Character number (1 - 35):');
+    if (s === null) return;
+    if (isNaN(s)) { alert('Please enter a number'); return; }
+    const num = Number(s);
+    if (num < 1 || num > 35) { alert('Please choose 1 - 35'); return; }
+    localStorage.setItem("playerSkin", String(num));
+    modules['Set Character'] = true;
+    renderArrayList(guiOpen);
+    alert('✅ Character set — reloading...');
+    safeReloadLater();
+  }
+  function setPet() {
+    const p = prompt('Enter Pet number (1 - 9):');
+    if (p === null) return;
+    if (isNaN(p)) { alert('Please enter a number'); return; }
+    const num = Number(p);
+    if (num < 1 || num > 9) { alert('Please choose 1 - 9'); return; }
+    localStorage.setItem("playerPet", String(num));
+    modules['Set Pet'] = true;
+    renderArrayList(guiOpen);
+    alert('✅ Pet set — reloading...');
+    safeReloadLater();
+  }
 
-  /* -------------------------
-     Helpers for setting localStorage safely
-     ------------------------- */
-  function safeReloadLater(ms = 700) {
-    setTimeout(() => location.reload(), ms);
-  }
+            renderArrayList(false);
+            console.log('Voidium X loaded — Press RightShift to toggle GUI');
 
-  function applyMaxStats() {
-    try {
-      localStorage.setItem("unlockedSkins", "[" + [...Array(35)].map((_, i) => i + 1).join(",") + "]");
-      localStorage.setItem("playerSkin", "35");
-      localStorage.setItem("playerXP", "314159");
-      localStorage.setItem("unlockedPets", "[1,2,3,4,5,6,7,8,9]");
-      localStorage.setItem("playerPet", "9");
-      modules['Max Stats'] = true;
-      renderArrayList(guiOpen);
-      alert('✅ Max Stats applied — reloading...');
-      safeReloadLater();
-      return void 0;
-    } catch (err) {
-      console.error(err);
-      alert('Error applying Max Stats: ' + (err.message || err));
-    }
-  }
-
-  function setCoins() {
-    const a = prompt('Enter coins:');
-    if (a === null) return;
-    if (isNaN(a)) { alert('Please enter a valid number'); return; }
-    localStorage.setItem("coinsOwned", a);
-    const el1 = document.getElementById('homepage-booty');
-    const el2 = document.getElementById('skin-popup-booty');
-    if (el1) el1.innerHTML = a;
-    if (el2) el2.innerHTML = a;
-    modules['Set Coins'] = true;
-    renderArrayList(guiOpen);
-    alert('✅ Coins set — reloading...');
-    safeReloadLater();
-  }
-
-  function setXP() {
-    const x = prompt('Enter XP (0 - 13500):');
-    if (x === null) return;
-    if (isNaN(x)) { alert('Please enter a number'); return; }
-    const num = Math.min(Math.max(Number(x), 0), 13500);
-    localStorage.setItem("playerXP", String(num));
-    modules['Set XP'] = true;
-    renderArrayList(guiOpen);
-    alert('✅ XP set — reloading...');
-    safeReloadLater();
-  }
-
-  function setPetLevel() {
-    const l = prompt('Enter Pet Level (1 - 14):');
-    if (l === null) return;
-    if (isNaN(l)) { alert('Please enter a number'); return; }
-    const num = Number(l);
-    if (num < 1 || num > 14) { alert('Pet level must be between 1 and 14'); return; }
-    localStorage.setItem("playerPetLevel", String(num));
-    modules['Set Pet Level'] = true;
-    renderArrayList(guiOpen);
-    alert('✅ Pet level set — reloading...');
-    safeReloadLater();
-  }
-
-  function setIsland() {
-    const isl = prompt('Select Island:\n1 = Tortuga\n2 = Beach\n3 = Easter\n4 = Wreck\n5 = Aztec\n6 = Volcano\n7 = Village');
-    if (isl === null) return;
-    if (isNaN(isl)) { alert('Please enter a number 1-7'); return; }
-    const n = Number(isl);
-    if (n < 1 || n > 7) { alert('Please enter a number 1-7'); return; }
-    const islands = [0, 140, 700, 2100, 4400, 7600, 13500];
-    localStorage.setItem("playerXP", String(islands[n - 1]));
-    modules['Set Island'] = true;
-    renderArrayList(guiOpen);
-    alert('✅ Island set — reloading...');
-    safeReloadLater();
-  }
-
-  function setCharacter() {
-    const s = prompt('Enter Character number (1 - 35):');
-    if (s === null) return;
-    if (isNaN(s)) { alert('Please enter a number'); return; }
-    const num = Number(s);
-    if (num < 1 || num > 35) { alert('Please choose 1 - 35'); return; }
-    localStorage.setItem("playerSkin", String(num));
-    modules['Set Character'] = true;
-    renderArrayList(guiOpen);
-    alert('✅ Character set — reloading...');
-    safeReloadLater();
-  }
-
-  function setPet() {
-    const p = prompt('Enter Pet number (1 - 9):');
-    if (p === null) return;
-    if (isNaN(p)) { alert('Please enter a number'); return; }
-    const num = Number(p);
-    if (num < 1 || num > 9) { alert('Please choose 1 - 9'); return; }
-    localStorage.setItem("playerPet", String(num));
-    modules['Set Pet'] = true;
-    renderArrayList(guiOpen);
-    alert('✅ Pet set — reloading...');
-    safeReloadLater();
-  }
-
-  /* -------------------------
-     Hook buttons
-     ------------------------- */
-  document.getElementById('vx-maxstats').addEventListener('click', applyMaxStats);
-  document.getElementById('vx-setcoins').addEventListener('click', setCoins);
-  document.getElementById('vx-setxp').addEventListener('click', setXP);
-  document.getElementById('vx-setpetlevel').addEventListener('click', setPetLevel);
-  document.getElementById('vx-setisland').addEventListener('click', setIsland);
-  document.getElementById('vx-setcharacter').addEventListener('click', setCharacter);
-  document.getElementById('vx-setpet').addEventListener('click', setPet);
-
-  /* -------------------------
-     Init: show watermark always; arraylist hidden until GUI open
-     ------------------------- */
-  renderArrayList(false);
-  // gentle console note
-  console.log('Voidium X loaded — RightShift toggles GUI/ArrayList (GUI is centered & fixed).');
-})();
+        })();
     </script>
 </body>
 </html>
