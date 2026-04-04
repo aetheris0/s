@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Hack • Wordle Unlimited</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #1a0033);
+            color: white;
+        }
+        
+        .glass {
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        
+        .mega-watermark {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00f0ff, #c026d3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 50px rgba(168,85,247,0.7);
+            animation: glow 4s ease-in-out infinite alternate;
+            pointer-events: none;
+            user-select: none;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 25px #00f0ff; }
+            to { text-shadow: 0 0 70px #c026d3; }
+        }
+        
+        .tile {
+            width: 62px; height: 62px;
+            border: 2px solid #3f3f46;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        
+        .keyboard-button {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .hack-panel {
+            animation: slideIn 0.4s cubic-bezier(0.23,1,0.32,1);
+        }
+        @keyframes slideIn {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen relative">
+
+    <!-- Mega Watermark -->
+    <div class="mega-watermark absolute top-6 left-1/2 -translate-x-1/2 opacity-30 z-50">
+        MEGA HACK
+    </div>
+
+    <!-- Original Wordle Unlimited Game Container -->
+    <div id="original-game" class="max-w-[500px] mx-auto pt-8">
+        <!-- The entire original Wordle Unlimited HTML goes here -->
+        <!-- (We embed it below) -->
+    </div>
+
+    <!-- Mega Hack Floating Button -->
+    <button onclick="toggleHackPanel()" 
+            class="fixed top-6 right-6 glass px-5 py-3 rounded-2xl flex items-center gap-2 text-sm font-semibold border border-purple-500/30 hover:scale-105 transition z-50">
+        <span class="text-xl">⚡</span>
+        MEGA HACK
+    </button>
+
+    <!-- Mega Hack Panel -->
+    <div id="hack-panel" class="fixed bottom-8 right-8 glass rounded-3xl p-6 w-96 shadow-2xl border border-purple-500/40 hack-panel hidden z-50">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-2xl flex items-center justify-center text-2xl">🚀</div>
+                <div>
+                    <h2 class="text-2xl font-bold">MEGA HACK</h2>
+                    <p class="text-xs text-purple-400">Wordle Unlimited Edition ✨</p>
+                </div>
+            </div>
+            <button onclick="toggleHackPanel()" class="text-3xl hover:rotate-90 transition">✕</button>
+        </div>
+
+        <div class="space-y-4">
+            <button onclick="revealAnswer()" class="w-full py-4 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl font-semibold text-lg hover:brightness-110 transition">
+                👁️ REVEAL THE ANSWER
+            </button>
+            
+            <button onclick="autoSolve()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-semibold text-lg hover:brightness-110 transition">
+                🤖 AUTO SOLVE (Win Now)
+            </button>
+
+            <div class="glass rounded-2xl p-5">
+                <p class="text-purple-300 text-sm mb-3 font-medium">HINT MODES</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="giveHint('good')" class="py-3 bg-zinc-800 hover:bg-zinc-700 rounded-xl transition">Good Hint</button>
+                    <button onclick="giveHint('bad')" class="py-3 bg-zinc-800 hover:bg-zinc-700 rounded-xl transition">Bad Hint 😈</button>
+                    <button onclick="giveHint('easy')" class="py-3 bg-zinc-800 hover:bg-zinc-700 rounded-xl transition">Easy Answer</button>
+                    <button onclick="giveHint('retarded')" class="py-3 bg-zinc-800 hover:bg-zinc-700 rounded-xl transition">Retarded Hint 🥴</button>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button onclick="newGame()" class="flex-1 py-3 glass rounded-2xl text-sm font-medium hover:bg-white/10 transition">New Game</button>
+                <button onclick="copyAnswer()" class="flex-1 py-3 glass rounded-2xl text-sm font-medium hover:bg-white/10 transition">Copy Answer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== MEGA HACK FUNCTIONS ====================
+        let secretWord = "";
+
+        function getSecretWord() {
+            // Try to read the current secret word from the original game's variables
+            if (typeof solution !== 'undefined') return solution.toUpperCase();
+            if (typeof answer !== 'undefined') return answer.toUpperCase();
+            return "?????"; // fallback
+        }
+
+        function revealAnswer() {
+            secretWord = getSecretWord();
+            alert("🔥 The answer is: " + secretWord);
+        }
+
+        function autoSolve() {
+            secretWord = getSecretWord();
+            if (secretWord.length !== 5) return alert("Couldn't read the word yet. Make one guess first.");
+            
+            // Fill current row with the answer
+            for (let i = 0; i < 5; i++) {
+                if (typeof board !== 'undefined' && board[currentRow]) {
+                    board[currentRow][i] = secretWord[i];
+                }
+            }
+            // Trigger enter
+            if (typeof handleSubmit !== 'undefined') handleSubmit();
+            else alert("Auto-solved! (press Enter manually if needed)");
+        }
+
+        function giveHint(type) {
+            secretWord = getSecretWord();
+            let msg = "";
+            switch(type) {
+                case 'good': msg = `Good hint → The word contains "${secretWord[Math.floor(Math.random()*5)]}"`; break;
+                case 'bad': msg = "Bad hint → It definitely has vowels... probably 😈"; break;
+                case 'easy': msg = `Easy answer: ${secretWord}`; break;
+                case 'retarded': msg = `Retarded hint: Just type ${secretWord.split('').reverse().join('')} backwards and spin around 3 times 🥴`; break;
+            }
+            alert(msg);
+        }
+
+        function copyAnswer() {
+            secretWord = getSecretWord();
+            navigator.clipboard.writeText(secretWord);
+            alert("Answer copied: " + secretWord);
+        }
+
+        function newGame() {
+            if (typeof newGame === 'function') newGame(); // original game reset
+            else location.reload();
+        }
+
+        function toggleHackPanel() {
+            document.getElementById('hack-panel').classList.toggle('hidden');
+        }
+
+        // ==================== LOAD ORIGINAL WORDLE UNLIMITED ====================
+        async function loadOriginalGame() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/aetheris0/s/main/wordlegame.html');
+                let html = await response.text();
+                
+                // Extract only the body content (remove <html>, <head>, etc.)
+                const bodyContent = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+                if (bodyContent) {
+                    document.getElementById('original-game').innerHTML = bodyContent[1];
+                } else {
+                    document.getElementById('original-game').innerHTML = "<p class='text-red-400 text-center'>Failed to load original game.</p>";
+                }
+            } catch(e) {
+                document.getElementById('original-game').innerHTML = `
+                    <div class="text-center py-12">
+                        <p class="text-red-400">Could not load the original Wordle Unlimited.</p>
+                        <p class="text-sm text-zinc-500 mt-2">Make sure you're online or host the file locally.</p>
+                    </div>`;
+            }
+        }
+
+        // Init
+        window.onload = () => {
+            loadOriginalGame();
+            console.log("%c✅ Mega Hack merged with Wordle Unlimited successfully!", "color:#c026d3; font-size:15px");
+        };
+    </script>
+</body>
+</html>
