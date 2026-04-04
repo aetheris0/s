@@ -2,22 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6aaa64">
     <title>Wordle Unlimited • Mega Hack</title>
-    
-    <!-- Original game styles and scripts will be kept - paste them here if needed -->
-    <!-- For simplicity we assume you paste the full original head content above this comment -->
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-        
-        /* Mega Hack Transparent Glass UI */
+
+        /* Original Wordle styles (kept intact) */
+        :root {
+            --green: #6aaa64;
+            --darkendGreen: #538d4e;
+            --yellow: #c9b458;
+            --darkendYellow: #b59f3b;
+            --color-tone-1: #1a1a1b;
+            --color-tone-2: #787c7e;
+            --color-tone-3: #878a8c;
+            --color-tone-4: #d3d6da;
+            --color-tone-5: #edeff1;
+            --color-tone-6: #f6f7f8;
+            --color-tone-7: #ffffff;
+        }
+        .nightmode {
+            --color-tone-1: #d7dadc;
+            --color-tone-2: #818384;
+            --color-tone-3: #565758;
+            --color-tone-4: #3a3a3c;
+            --color-tone-5: #272729;
+            --color-tone-6: #1a1a1b;
+            --color-tone-7: #121213;
+        }
+        body {
+            font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--color-tone-7);
+            margin: 0;
+            padding: 0;
+            overflow-y: hidden;
+        }
+
+        /* Mega Hack Transparent Glass Overlay */
+        .mega-watermark {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.8rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(90deg, #00f0ff, #c026d3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.25;
+            pointer-events: none;
+            z-index: 9999;
+            text-shadow: 0 0 40px rgba(192, 38, 211, 0.6);
+        }
+
         .mega-panel {
             position: fixed;
             bottom: 25px;
             right: 25px;
             width: 360px;
-            background: rgba(20, 20, 40, 0.55);
+            background: rgba(20, 20, 40, 0.65);
             backdrop-filter: blur(18px);
             border: 1px solid rgba(100, 200, 255, 0.35);
             border-radius: 20px;
@@ -28,50 +73,60 @@
             z-index: 10000;
             display: none;
         }
-        
-        .mega-watermark {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2.6rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, #00f0ff, #c026d3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            opacity: 0.28;
-            pointer-events: none;
-            z-index: 9999;
-            text-shadow: 0 0 40px rgba(192, 38, 211, 0.5);
-        }
-        
+
         .mega-btn {
             width: 100%;
             padding: 14px;
             margin: 8px 0;
-            background: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.1);
             border: 1px solid rgba(0, 240, 255, 0.4);
             border-radius: 12px;
             color: white;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.25s;
         }
-        
+
         .mega-btn:hover {
             background: rgba(0, 240, 255, 0.25);
-            border-color: #00f0ff;
             transform: scale(1.03);
         }
-        
+
         .hint-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
+
+        /* Floating button */
+        .mega-float {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10001;
+            padding: 10px 18px;
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid #00f0ff;
+            border-radius: 9999px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Original Wordle Unlimited Game -->
+    <script>
+        (function () {
+            window.wordle = window.wordle || {};
+            window.wordle.hash = 'e65ce0a5';
+        })();
+    </script>
+
+    <!-- The entire original game script you provided -->
+    <script>
 <!DOCTYPE html>
 <html lang="en"><head>
     <meta charset="UTF-8">
@@ -211,45 +266,43 @@ this.wordle=this.wordle||{},this.wordle.bundle=function(e){"use strict";function
 
  
 </body></html>
+    </script>
 
+    <game-app></game-app>
 
     <!-- Mega Hack Watermark -->
     <div class="mega-watermark">MEGA HACK</div>
 
-    <!-- Mega Hack Transparent Panel -->
+    <!-- Floating Mega Hack Button -->
+    <button onclick="toggleMegaPanel()" class="mega-float">⚡ Mega Hack</button>
+
+    <!-- Transparent Mega Hack Panel -->
     <div id="megaPanel" class="mega-panel">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-            <h2 style="margin:0; background:linear-gradient(90deg,#00f0ff,#c026d3); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">⚡ Mega Hack</h2>
-            <button onclick="togglePanel()" style="background:none;border:none;color:#aaa;font-size:1.4rem;cursor:pointer;">✕</button>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h2 style="margin:0;background:linear-gradient(90deg,#00f0ff,#c026d3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">⚡ Mega Hack</h2>
+            <button onclick="toggleMegaPanel()" style="background:none;border:none;color:#aaa;font-size:1.6rem;cursor:pointer;">✕</button>
         </div>
-        
+
         <button class="mega-btn" onclick="revealAnswer()">👁️ Reveal Answer</button>
-        <button class="mega-btn" onclick="autoSolve()">🤖 Auto Solve (Instant Win)</button>
-        
-        <div style="margin:15px 0 8px; color:#bbb; font-size:0.95rem;">Hint Modes</div>
+        <button class="mega-btn" onclick="autoSolve()">🤖 Auto Solve (Win Now)</button>
+
+        <div style="margin:15px 0 8px;color:#bbb;font-size:0.95rem;">Hint Modes</div>
         <div class="hint-grid">
             <button class="mega-btn" onclick="giveHint('good')">Good Hint</button>
             <button class="mega-btn" onclick="giveHint('bad')">Bad Hint 😈</button>
             <button class="mega-btn" onclick="giveHint('easy')">Easy Answer</button>
             <button class="mega-btn" onclick="giveHint('retarded')">Retarded Hint 🥴</button>
         </div>
-        
-        <div style="display:flex; gap:10px; margin-top:15px;">
+
+        <div style="display:flex;gap:10px;margin-top:15px;">
             <button class="mega-btn" onclick="newGame()" style="flex:1;">New Game</button>
             <button class="mega-btn" onclick="copyAnswer()" style="flex:1;">Copy Answer</button>
         </div>
     </div>
 
-    <!-- Floating Toggle Button -->
-    <button onclick="togglePanel()" 
-            style="position:fixed; top:20px; right:20px; z-index:10001; padding:10px 18px; background:rgba(0,240,255,0.15); border:1px solid #00f0ff; border-radius:9999px; color:white; font-weight:600; cursor:pointer; font-family:Poppins;">
-        ⚡ Mega Hack
-    </button>
-
     <script>
-        // Mega Hack Core Functions
+        // Mega Hack Functions (Voidium-style injection into the real game)
         function getAnswer() {
-            // Works with most Wordle Unlimited clones
             if (typeof solution !== "undefined") return solution.toUpperCase();
             if (typeof answer !== "undefined") return answer.toUpperCase();
             return "?????";
@@ -261,44 +314,40 @@ this.wordle=this.wordle||{},this.wordle.bundle=function(e){"use strict";function
 
         function autoSolve() {
             const word = getAnswer();
-            if (word.length !== 5) return alert("Play one guess first");
-            
-            // Fill current row
+            if (word.length !== 5) return alert("Make one guess first");
             if (typeof board !== "undefined" && typeof currentRow !== "undefined") {
                 for (let i = 0; i < 5; i++) board[currentRow][i] = word[i];
             }
             if (typeof submitGuess === "function") submitGuess();
             else if (typeof handleSubmit === "function") handleSubmit();
-            else alert("Answer filled - press Enter if needed");
         }
 
-        function giveHint(mode) {
+        function giveHint(type) {
             const word = getAnswer();
             let msg = "";
-            if (mode === "good") msg = `Good hint: Contains letter "${word[Math.floor(Math.random()*5)]}"`;
-            else if (mode === "bad") msg = "Bad hint: Maybe try words with lots of vowels? (not really)";
-            else if (mode === "easy") msg = `Easy: The word is ${word}`;
-            else if (mode === "retarded") msg = `Retarded hint: Type ${word.split('').reverse().join('')} backwards and pray 🥴`;
+            if (type === "good") msg = `Good hint: Contains "${word[Math.floor(Math.random()*5)]}"`;
+            else if (type === "bad") msg = "Bad hint: Probably has vowels... or not 😈";
+            else if (type === "easy") msg = `Easy: The word is ${word}`;
+            else if (type === "retarded") msg = `Retarded hint: Type ${word.split('').reverse().join('')} backwards 🥴`;
             alert(msg);
         }
 
         function copyAnswer() {
             navigator.clipboard.writeText(getAnswer());
-            alert("Answer copied to clipboard");
+            alert("Answer copied");
         }
 
         function newGame() {
             if (typeof resetGame === "function") resetGame();
-            else if (typeof newGame === "function") newGame();
             else location.reload();
         }
 
-        function togglePanel() {
+        function toggleMegaPanel() {
             const panel = document.getElementById("megaPanel");
-            panel.style.display = (panel.style.display === "block") ? "none" : "block";
+            panel.style.display = panel.style.display === "block" ? "none" : "block";
         }
 
-        console.log("%cMega Hack injected - transparent glass mode active", "color:#00f0ff");
+        console.log("%cMega Hack injected into Wordle Unlimited (transparent glass)", "color:#00f0ff;font-size:14px");
     </script>
 </body>
 </html>
